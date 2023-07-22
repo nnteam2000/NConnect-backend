@@ -11,17 +11,18 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user' => 'required|min:3',
+            'name' => 'required|min:3',
             'password' => 'required',
+            "remember" => "boolean"
         ];
     }
 
     public function messages(): array
     {
         return [
-            'user.required' => __('auth.failed'),
-            'user.min' => __('validation.min.string', ['attribute' => 'user', 'min' => 3]),
-            'password.required' => __('validation.required', ['attribute' => 'password']),
+            'name.required' => __('auth.failed'),
+            'name.min' =>__('auth.failed'),
+            'password.required' => __('auth.failed'),
         ];
     }
 
