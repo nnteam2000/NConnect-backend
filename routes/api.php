@@ -33,7 +33,5 @@ Route::post('/login', function (Request $request) {
         ]);
     }
 
-    return response()->json([
-        'message' => 'nope'
-    ]);
+    return response()->json(['password' => __('auth.failed')], 401);
 });
