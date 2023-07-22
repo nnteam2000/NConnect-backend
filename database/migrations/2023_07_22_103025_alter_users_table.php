@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class () extends Migration {
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->string('google_id')->nullable();
             $table->string('image')->default(env('FRONTEND_URL') . '/assets/images/avatar.png');
             $table->boolean('is_admin')->default(false);
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(false);
             $table->boolean('is_blocked')->default(false);
         });
     }

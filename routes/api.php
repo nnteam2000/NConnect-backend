@@ -15,16 +15,25 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return response()->json([
+        'user' => $request->user()
+    ]);
     return $request->user();
 });
 
-Route::get('/test', function (Request $request) {
-    return response()->json([
-        'message' => 'Hello World!'
-    ]);
-});
 
-Route::middleware('auth:sanctum')->get('/login', function (Request $request) {
+Route::post('/login', function (Request $request) {
+    $credentials = $request->only('email', 'password');
+
+    if (auth()->attempt($credentials)) {
+        request()->session()->regenerate();
+
+        return response()->json([
+            'message' => 'logged in'
+        ]);
+    }
+
     return response()->json([
-        'message' => 'Hello World!']);
+        'message' => 'nope'
+    ]);
 });
