@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
+use App\Jobs\ProcessVerifyEmail;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -20,7 +20,7 @@ class AuthController extends Controller
             if(auth()->user()->hasVerifiedEmail()) {
                 return response()->json(['message' => 'Admin login successfully'], 200);
             }
-            auth()->user()->sendEmailVerificationNotification();
+            dispatch(new ProcessVerifyEmail());
             return response()->json(['email_not_verified' => 'Please verify your email'], 401);
         }
 
@@ -38,8 +38,16 @@ class AuthController extends Controller
         $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
         auth()->login($user);
-        event(new Registered($user));
+        dispatch(new ProcessVerifyEmail());
 
         return response()->json(['message' => 'verify email'], 200);
+    }
+
+    public function logout(): JsonResponse
+    {
+        auth()->guard('web')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return response()->json(['message' => 'Admin logout successfully'], 200);
     }
 }
