@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,24 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return response()->json([
-        'user' => $request->user()
-    ]);
-    return $request->user();
-});
+Route::group(['controller' => AuthController::class], function () {
+    Route::post('/register', 'register')->name('auth.register');
+    Route::get('/email/verify/{id}/{hash}', 'verification')->middleware(['signed'])->name('verification.verify');
 
-
-Route::post('/login', function (Request $request) {
-    $credentials = $request->only('email', 'password');
-
-    if (auth()->attempt($credentials)) {
-        request()->session()->regenerate();
-
-        return response()->json([
-            'message' => 'logged in'
-        ]);
-    }
-
-    return response()->json(['password' => __('auth.failed')], 401);
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('/user', 'isAuthenticated')->name('auth.user');
+        Route::post('/login', 'login')->name('auth.login');
+        Route::get('/logout', 'logout')->name('auth.logout');
+    });
 });

@@ -35,7 +35,6 @@
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr style="margin-bottom: 70px">
                             <td class="img-container" align="center">
-                                <x-commentIcon/>
                                 <p style="color: #faddad; text-transform: uppercase;font-weight: 500;font-size: 12px;">movie quotes</p>
                             </td>
                         </tr>
@@ -51,7 +50,7 @@
                         </tr>
                         <tr >
                             <td>
-                                <a href="{{ $url }}" style="margin-bottom: 40px;text-align: left; cursor: pointer; background-color:#E31221;border-radius: 4px; line-height: 150%; padding: 7px 13px 7px 13px; text-decoration:none;display:inline-block;color: white;">{{ $buttonText }}</a>
+                                <a href="{{ $url }}" style="margin-bottom: 40px;text-align: left; cursor: pointer; background-color:#fa00;border-radius: 4px; line-height: 150%; padding: 7px 13px 7px 13px; text-decoration:none;display:inline-block;color: white;">{{ $buttonText }}</a>
                             </td>
                         </tr>
                         <tr >
@@ -61,7 +60,7 @@
                         </tr>
                         <tr>
                             <td  >
-                                <a href="{{ $url }}" style="margin-bottom: 40px;color: #faddad;text-decoration:none;display:block;">{{ $url }}</a>
+                                <p style="margin-bottom: 40px;color: #faddad;text-decoration:none;display:block;">{{ $url }}</p>
                             </td>
                         </tr>
                         <tr >
