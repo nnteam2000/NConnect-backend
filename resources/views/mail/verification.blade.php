@@ -28,14 +28,14 @@
 
         </style>
     </head>
-    <body style="background-image: linear-gradient(187.16deg, #102111 0.07%, #191725 51.65%, #102111 98.75%)">
+    <body  style="height:100vh;background-image: linear-gradient(187.16deg, #05a7E6  0.07%, #000011 51.65%, #007777 98.75%); overflow:hidden; margin-bottom: 20px;">
         <table border="0" cellpadding="0" cellspacing="0" width="100%" class="padding-inline">
             <tr style="color: #ffffff; font-weight: 400;font-size: 16px">
                 <td  style="padding: 80px 0 80px 0;">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr style="margin-bottom: 70px">
                             <td class="img-container" align="center">
-                                <p style="color: #faddad; text-transform: uppercase;font-weight: 500;font-size: 12px;">movie quotes</p>
+                                <p style="text-transform: uppercase;font-weight: 500;font-size: 24px;">Nconnect</p>
                             </td>
                         </tr>
                         <tr>
@@ -50,7 +50,7 @@
                         </tr>
                         <tr >
                             <td>
-                                <a href="{{ $url }}" style="margin-bottom: 40px;text-align: left; cursor: pointer; background-color:#fa00;border-radius: 4px; line-height: 150%; padding: 7px 13px 7px 13px; text-decoration:none;display:inline-block;color: white;">{{ $buttonText }}</a>
+                                <a href="{{ $url }}" style="margin-bottom: 40px;text-align: left; cursor: pointer; background-color:#525;border-radius: 4px; line-height: 150%; padding: 7px 13px 7px 13px; text-decoration:none;display:inline-block;color: white;">{{ $buttonText }}</a>
                             </td>
                         </tr>
                         <tr >
@@ -60,7 +60,7 @@
                         </tr>
                         <tr>
                             <td  >
-                                <p style="margin-bottom: 40px;color: #faddad;text-decoration:none;display:block;">{{ $url }}</p>
+                                <p style="font-style: italic;margin-bottom: 40px;color: #CCCCCC;text-decoration:none;display:block;">{{ $url }}</p>
                             </td>
                         </tr>
                         <tr >
@@ -70,7 +70,7 @@
                         </tr>
                         <tr>
                             <td  class="btn-container" >
-                                <p>{{ $regards }}</p>
+                                <p>{{ $regards }} Nconnect Team.</p>
                             </td>
                         </tr>
                     </table>
