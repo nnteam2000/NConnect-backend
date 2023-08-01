@@ -2,9 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\EmailVerification;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
