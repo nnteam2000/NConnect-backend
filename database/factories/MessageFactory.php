@@ -11,8 +11,8 @@ class MessageFactory extends Factory
     {
         return [
             'content' => $this->faker->sentence,
-            "sender_id" => User::first(),
-            "receiver_id" => User::factory()->create(),
+            "sender_id" => User::all()->random(1)->first(),
+            "receiver_id" => User::all()->random(1)->first(),
         ];
     }
 }
