@@ -15,6 +15,10 @@ class Like extends Model
         'is_liked',
     ];
 
+    public $casts = [
+        'liked_at' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
