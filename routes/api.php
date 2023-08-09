@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['controller' => AuthController::class], function () {
+    Route::post('/login', 'login')->name('auth.login');
     Route::post('/register', 'register')->name('auth.register');
     Route::get('/email/verify/{id}/{hash}', 'verification')->middleware(['signed'])->name('verification.verify');
 
@@ -24,7 +26,11 @@ Route::group(['controller' => AuthController::class], function () {
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/user', 'isAuthenticated')->name('auth.user');
-        Route::post('/login', 'login')->name('auth.login');
         Route::get('/logout', 'logout')->name('auth.logout');
     });
+});
+
+
+Route::group(['middleware' => 'auth:sanctum', 'controller' => PostController::class, 'prefix'=> 'posts'], function () {
+    Route::get('/', 'index')->name('posts.index');
 });
