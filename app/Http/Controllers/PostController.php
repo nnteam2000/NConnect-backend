@@ -9,7 +9,7 @@ class PostController extends Controller
 {
     public function index(): JsonResponse
     {
-        return response()->json(['posts' => Post::with('user')->latest()->simplePaginate(5)]);
+        return response()->json(['posts' => Post::with(['user', 'comments'])->latest()->simplePaginate(5)]);
     }
 
 }
