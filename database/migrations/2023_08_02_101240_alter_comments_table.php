@@ -9,6 +9,7 @@ return new class () extends Migration {
     {
         Schema::table('comments', function (Blueprint $table) {
             $table->foreignId('post_id')->constrained()->cascadeOnDelete();
+            $table->dropColumn('read_at');
         });
     }
 

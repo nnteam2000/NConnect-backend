@@ -14,7 +14,7 @@ class LikeFactory extends Factory
             "is_liked" => $this->faker->boolean,
             "post_id" => Post::all()->random()->first(),
             "user_id" => User::all()->random()->first(),
-            "liked"=> $this->faker->dateTime(),
+            "liked_at"=> $this->faker->dateTime(),
         ];
     }
 }
