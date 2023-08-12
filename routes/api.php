@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,4 +35,8 @@ Route::group(['controller' => AuthController::class], function () {
 Route::group(['middleware' => 'auth:sanctum', 'controller' => PostController::class, 'prefix'=> 'posts'], function () {
     Route::get('/', 'index')->name('posts.index');
     Route::get('/{post}', 'show')->name('posts.show');
+});
+
+Route::group(['middleware' => 'auth:sanctum', 'controller' => CommentController::class, 'prefix'=> 'comments'], function () {
+    Route::get('/', 'index')->name('comment.index');
 });
