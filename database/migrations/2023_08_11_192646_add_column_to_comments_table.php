@@ -9,13 +9,14 @@ return new class () extends Migration {
     {
         Schema::table('comments', function (Blueprint $table) {
             $table->unsignedBigInteger('parent_id')->nullable();
+            $table->bigInteger('children_count')->default(0);
         });
     }
 
     public function down(): void
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->dropColumn('parent_id');
+            $table->dropColumn(['parent_id', 'children_count']);
         });
     }
 };
