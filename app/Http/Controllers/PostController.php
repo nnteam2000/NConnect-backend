@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\posts\StoreRequest;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 
@@ -20,5 +21,12 @@ class PostController extends Controller
     public function show(Post $post)
     {
         return response()->json(['post' => $post->load('user:id,name,image')]);
+    }
+
+    public function store(StoreRequest $request)
+    {
+        $image = $request->file('image') ? $request->file('image')->store('posts') : null;
+        Post::create([...$request->validated(), 'image' => $image]);
+        return response()->json(['comment' => 'Post created successfully']);
     }
 }

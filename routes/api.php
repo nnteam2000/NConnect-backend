@@ -35,6 +35,7 @@ Route::group(['controller' => AuthController::class], function () {
 Route::group(['middleware' => 'auth:sanctum', 'controller' => PostController::class, 'prefix'=> 'posts'], function () {
     Route::get('/', 'index')->name('posts.index');
     Route::get('/{post}', 'show')->name('posts.show');
+    Route::post('/store', 'store')->name('posts.store');
 });
 
 Route::group(['middleware' => 'auth:sanctum', 'controller' => CommentController::class, 'prefix'=> 'comments'], function () {
