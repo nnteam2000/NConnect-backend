@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\posts\StoreRequest;
+use App\Http\Requests\posts\UpdateRequest;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 
@@ -18,15 +19,28 @@ class PostController extends Controller
         );
     }
 
-    public function show(Post $post)
+    public function show(Post $post): JsonResponse
     {
         return response()->json(['post' => $post->load('user:id,name,image')]);
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): JsonResponse
     {
-        $image = $request->file('image') ? $request->file('image')->store('posts') : null;
+        $image = $request->file('image') ? env('APP_URL') . '/storage/' . $request->file('image')->store('posts') : null;
         Post::create([...$request->validated(), 'image' => $image]);
         return response()->json(['comment' => 'Post created successfully']);
+    }
+
+    public function update(UpdateRequest $request, Post $post): JsonResponse
+    {
+        $data = $request->validated();
+        $data['image'] = $request->file('image') ? env('APP_URL') . '/storage/' .  $request->file('image')->store('posts') : null;
+
+        if($data['image'] == null && $data['content'] == null) {
+            return response()->json(['comment' => 'Nothing to update'], 422);
+        }
+
+        $post->update($data);
+        return response()->json(['comment' => 'Post updated successfully']);
     }
 }

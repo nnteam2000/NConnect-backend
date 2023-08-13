@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth:sanctum', 'controller' => PostController::cl
     Route::get('/', 'index')->name('posts.index');
     Route::get('/{post}', 'show')->name('posts.show');
     Route::post('/store', 'store')->name('posts.store');
+    Route::patch('/update/{post}', 'update')->name('posts.update');
 });
 
 Route::group(['middleware' => 'auth:sanctum', 'controller' => CommentController::class, 'prefix'=> 'comments'], function () {
