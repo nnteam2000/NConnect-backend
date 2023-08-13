@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\posts\DeleteRequest;
 use App\Http\Requests\posts\StoreRequest;
 use App\Http\Requests\posts\UpdateRequest;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -42,5 +44,15 @@ class PostController extends Controller
 
         $post->update($data);
         return response()->json(['comment' => 'Post updated successfully']);
+    }
+
+    public function delete(DeleteRequest $request, Post $post): JsonResponse
+    {
+        $path = public_path(substr($post->image, strlen(env('APP_URL'))));
+        if($post->image && File::exists($path)) {
+            File::delete($path);
+        }
+        $post->delete();
+        return response()->json(['comment' => 'Post deleted successfully']);
     }
 }
