@@ -14,6 +14,8 @@ class Comment extends Model
         'post_id',
         'content',
         'read_at',
+        'parent_id',
+        'children_count'
     ];
 
     protected $casts = [

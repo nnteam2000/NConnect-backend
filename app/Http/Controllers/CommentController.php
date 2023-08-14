@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\comments\StoreRequest;
 use App\Models\Comment;
+use Exception;
 use Illuminate\Http\JsonResponse;
 
 class CommentController extends Controller
@@ -17,5 +19,20 @@ class CommentController extends Controller
         $comments = $comments->latest()->skip($skip)->take(5)->get();
 
         return response()->json(['comments' => $comments, 'has_more_pages' => $has_more_pages]);
+    }
+
+    public function store(StoreRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
+
+        if(isset($data['parent_id'])) {
+            $parent = Comment::find($data['parent_id']);
+            $parent->update(['children_count' => $parent->children_count + 1]);
+        }
+
+        Comment::create($data);
+
+        return response()->json(['comment' => 'Comment created successfully']);
     }
 }

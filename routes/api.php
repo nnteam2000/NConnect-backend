@@ -3,7 +3,6 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,4 +41,7 @@ Route::group(['middleware' => 'auth:sanctum', 'controller' => PostController::cl
 
 Route::group(['middleware' => 'auth:sanctum', 'controller' => CommentController::class, 'prefix'=> 'comments'], function () {
     Route::get('/', 'index')->name('comment.index');
+    Route::post('/store', 'store')->name('comment.store');
+    Route::patch('/update/{comment}', 'update')->name('comment.update');
+    Route::delete('/delete/{comment}', "delete")->name('comment.delete');
 });
