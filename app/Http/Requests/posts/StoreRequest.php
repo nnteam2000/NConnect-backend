@@ -10,7 +10,6 @@ class StoreRequest extends FormRequest
     {
         return [
             'content' => 'required|string|max:1000|min:2',
-            'user_id' => 'required|exists:users,id',
             'image' => 'image|max:2024'
         ];
     }
@@ -22,8 +21,6 @@ class StoreRequest extends FormRequest
             'content.string' => __('validation.string', ['attribute' => 'content']),
             'content.max' => __('validation.max.string', ['attribute' => 'content', 'max' => 1000]),
             'content.max' => __('validation.min.string', ['attribute' => 'content', 'min' => 2]),
-            'user_id.required' => __('validation.required', ['attribute' => 'user id']),
-            'user_id.exists' => __('validation.exists', ['attribute' => 'user id']),
             'image.image' => __('validation.image', ['attribute' => 'image']),
             'image.max' => __('validation.max.file', ['attribute' => 'image', 'max' => 2024]),
         ];

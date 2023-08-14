@@ -29,7 +29,7 @@ class PostController extends Controller
     public function store(StoreRequest $request): JsonResponse
     {
         $image = $request->file('image') ? env('APP_URL') . '/storage/' . $request->file('image')->store('posts') : null;
-        Post::create([...$request->validated(), 'image' => $image]);
+        Post::create([...$request->validated(), 'image' => $image, 'user_id' => auth()->id()]);
         return response()->json(['comment' => 'Post created successfully']);
     }
 
