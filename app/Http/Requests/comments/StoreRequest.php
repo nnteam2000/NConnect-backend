@@ -11,7 +11,7 @@ class StoreRequest extends FormRequest
         return [
             'post_id' => 'required|integer|exists:posts,id',
             'parent_id' => 'integer|exists:comments,id',
-            'content' => 'required|string|max:1000|min:1',
+            'content' => 'required|string|max:999|min:1',
         ];
     }
 

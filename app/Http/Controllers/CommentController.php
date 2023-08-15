@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\comments\StoreRequest;
+use App\Http\Requests\comments\UpdateRequest;
 use App\Models\Comment;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -34,5 +35,12 @@ class CommentController extends Controller
         Comment::create($data);
 
         return response()->json(['comment' => 'Comment created successfully']);
+    }
+
+    public function update(UpdateRequest $request, Comment $comment): JsonResponse
+    {
+        $comment->update($request->validated());
+
+        return response()->json(['comment' => 'Comment updated successfully']);
     }
 }
