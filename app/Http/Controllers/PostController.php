@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\posts\DeleteRequest;
 use App\Http\Requests\posts\StoreRequest;
 use App\Http\Requests\posts\UpdateRequest;
 use App\Models\Post;
@@ -46,8 +45,10 @@ class PostController extends Controller
         return response()->json(['comment' => 'Post updated successfully']);
     }
 
-    public function delete(DeleteRequest $request, Post $post): JsonResponse
+    public function delete(Post $post): JsonResponse
     {
+        $this->authorize('isAuthor', [Post::class, $post->user_id]);
+
         $path = public_path(substr($post->image, strlen(env('APP_URL'))));
         if($post->image && File::exists($path)) {
             File::delete($path);

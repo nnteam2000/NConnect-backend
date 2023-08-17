@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\comments\StoreRequest;
 use App\Http\Requests\comments\UpdateRequest;
 use App\Models\Comment;
-use App\Policies\AuthorPolicy;
-use Exception;
 use Illuminate\Http\JsonResponse;
 
 class CommentController extends Controller
