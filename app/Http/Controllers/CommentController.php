@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\comments\StoreRequest;
 use App\Http\Requests\comments\UpdateRequest;
 use App\Models\Comment;
+use App\Policies\AuthorPolicy;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -43,4 +44,12 @@ class CommentController extends Controller
 
         return response()->json(['comment' => 'Comment updated successfully']);
     }
+    public function delete(Comment $comment): JsonResponse
+    {
+        $this->authorize('isAuthor', [Comment::class, $comment->user_id]);
+        $comment->delete();
+
+        return response()->json(['message' => 'Comment deleted successfully']);
+    }
+
 }
