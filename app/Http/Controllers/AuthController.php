@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\auth\GoogleCallbackAction;
 use App\Actions\auth\Login;
 use App\Actions\auth\LoginAction;
+use App\Actions\auth\RegisterAction;
 use App\Exceptions\EmailNotVerifiedException;
 use App\Http\Requests\auth\EmailVerificationRequest;
 use App\Http\Requests\auth\LoginRequest;
@@ -39,18 +41,13 @@ class AuthController extends Controller
         return response()->json(['message' => 'user logged in', 'user' => auth()->user()], 200);
     }
 
-    public function register(RegisterRequest $request): JsonResponse
+    public function register(RegisterRequest $request, RegisterAction $action): JsonResponse
     {
         $data = $request->validated();
+        $user = $action($data);
 
-        if(str_contains($data['name'], '@')) {
-            $data['email'] = $data['name'];
-            unset($data['name']);
-        }
-        $data['password'] = bcrypt($data['password']);
-        $user = User::create($data);
         auth()->login($user);
-        dispatch(new ProcessVerifyEmail(auth()->user()));
+        dispatch(new ProcessVerifyEmail($user));
 
         return response()->json(['message' => 'verify email',], 200);
     }
@@ -68,35 +65,11 @@ class AuthController extends Controller
         return Socialite::driver('google')->stateless()->redirect();
     }
 
-    public function googleCallback()
+    public function googleCallback(GoogleCallbackAction $action)
     {
-        $googleUser =  Socialite::driver('google')->stateless()->user();
-        $google_id = $googleUser->getId();
-
-        $user =User::firstWhere(['username'=> $googleUser->name ?? $googleUser->getNickname()]);
-
-        if($user && $user->google_id !== $google_id) {
-            return response()->json(['details'=>['username' => __('validation.exists', ['attribute'=> __('field_names.username')])]], 401);
-        }
-        $user =User::firstWhere(['email'=> $googleUser->getEmail()]);
-
-        if($user && $user->google_id !== $google_id) {
-            return response()->json(['details'=>['username' => __('validation.exists', ['attribute'=> __('field_names.email')])]], 401);
-        }
-
-        if(!$user) {
-            $user = User::create(
-                [
-                    'google_id' => $google_id,
-                    'email' => $googleUser->getEmail(),
-                    'username' => $googleUser->name ?? $googleUser->getNickname(),
-                    'password' => null,
-                    'image' => $googleUser->getAvatar(),
-                ]
-            );
-        }
-
+        $user = $action();
         auth()->login($user);
+
         return response()->json([
             'message' => 'user logged in',
             'user' => $user

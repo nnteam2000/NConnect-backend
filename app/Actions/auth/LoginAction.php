@@ -21,7 +21,6 @@ class LoginAction
             if(auth()->user()->email_verified_at) {
                 return true;
             }
-            dispatch(new ProcessVerifyEmail(auth()->user()));
             throw new EmailNotVerifiedException();
         }
 
