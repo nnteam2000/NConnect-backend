@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\auth\Login;
+use App\Actions\auth\LoginAction;
+use App\Exceptions\EmailNotVerifiedException;
 use App\Http\Requests\auth\EmailVerificationRequest;
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
 use App\Jobs\ProcessVerifyEmail;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Facades\Socialite;
+use Nette\Schema\Expect;
 
 class AuthController extends Controller
 {
@@ -27,25 +32,11 @@ class AuthController extends Controller
         return response()->json(['message' => 'Email verified successfully'], 200);
     }
 
-    public function login(LoginRequest $request): JsonResponse
+    public function login(LoginRequest $request, LoginAction $action): JsonResponse
     {
-        $data = $request->validated();
-        $remember = $data['remember'] ?? false;
+        $action($request->validated());
 
-        if(str_contains($data['name'], '@')) {
-            $data['email'] = $data['name'];
-            unset($data['name']);
-        }
-
-        if(auth()->guard('web')->attempt($data, $remember)) {
-            if(auth()->user()->email_verified_at) {
-                return response()->json(['message' => 'user logged in successfully', 'user'=> auth()->user()], 200);
-            }
-            dispatch(new ProcessVerifyEmail(auth()->user()));
-            return response()->json(['email_not_verified' => 'Please verify your email'], 401);
-        }
-
-        return response()->json(['message' => __('auth.failed')], 401);
+        return response()->json(['message' => 'user logged in', 'user' => auth()->user()], 200);
     }
 
     public function register(RegisterRequest $request): JsonResponse
