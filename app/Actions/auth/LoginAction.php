@@ -3,7 +3,6 @@
 namespace App\Actions\auth;
 
 use App\Exceptions\EmailNotVerifiedException;
-use App\Jobs\ProcessVerifyEmail;
 use Exception;
 
 class LoginAction
@@ -26,6 +25,5 @@ class LoginAction
 
 
         throw new Exception(__('auth.failed'), 401);
-        return false;
     }
 }

@@ -42,6 +42,7 @@ class CommentController extends Controller
 
         return response()->json(['comment' => 'Comment updated successfully']);
     }
+
     public function delete(Comment $comment): JsonResponse
     {
         $this->authorize('isAuthor', [Comment::class, $comment->user_id]);

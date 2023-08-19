@@ -3,20 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Actions\auth\GoogleCallbackAction;
-use App\Actions\auth\Login;
 use App\Actions\auth\LoginAction;
 use App\Actions\auth\RegisterAction;
-use App\Exceptions\EmailNotVerifiedException;
 use App\Http\Requests\auth\EmailVerificationRequest;
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
 use App\Jobs\ProcessVerifyEmail;
-use App\Models\User;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Facades\Socialite;
-use Nette\Schema\Expect;
 
 class AuthController extends Controller
 {
@@ -57,7 +52,7 @@ class AuthController extends Controller
         auth()->guard('web')->logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
-        return response()->json(['message' => 'Admin logout successfully'], 200);
+        return response()->json(['message' => 'user logged out successfully'], 200);
     }
 
     public function googleRedirect(): RedirectResponse
