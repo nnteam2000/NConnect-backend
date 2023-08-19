@@ -24,6 +24,9 @@ Route::group(['controller' => AuthController::class], function () {
     Route::get('/auth/redirect', 'googleRedirect')->name('auth.google.redirect');
     Route::get('/auth/callback', 'googleCallback')->name('auth.google.callback');
 
+    Route::post('/forget', 'forget')->name('password.forget');
+    Route::post('/reset', 'reset')->name('password.reset');
+
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/user', 'isAuthenticated')->name('auth.user');
         Route::get('/logout', 'logout')->name('auth.logout');
