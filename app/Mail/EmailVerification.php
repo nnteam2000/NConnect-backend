@@ -23,12 +23,12 @@ class EmailVerification extends Mailable implements ShouldQueue
         public string $url,
     ) {
     }
-
+    //! this mail class is never used
 
     public function content(): Content
     {
         return new Content(
-            view: 'auth.feedback',
+            view: 'mail.feedback',
             with: [
                 'greeting' => $this->greeting,
                 'thank_you' => $this->intructions,

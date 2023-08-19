@@ -26,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
             $url = env("FRONTEND_URL") . "/api/email/verify/" . $notifiable->getKey() . "/" . sha1($notifiable->getEmailForVerification()). '/' . app()->getLocale().'?' . $signiture;
 
             return (new MailMessage())->view(
-                'mail.verification',
+                'mail.feedback',
                 [
                     'greeting' => 'Hi '.$notifiable->name,
                     'thank_you' => 'Thank you for registering with us. Please click the button below to verify your email address.' ,
