@@ -6,11 +6,13 @@ use App\Actions\auth\GoogleCallbackAction;
 use App\Actions\auth\LoginAction;
 use App\Actions\auth\RegisterAction;
 use App\Http\Requests\auth\EmailVerificationRequest;
+use App\Http\Requests\auth\ForgetRequest;
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
 use App\Jobs\ProcessVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Password;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
@@ -54,6 +56,29 @@ class AuthController extends Controller
         request()->session()->regenerateToken();
         return response()->json(['message' => 'user logged out successfully'], 200);
     }
+
+    public function forget(ForgetRequest $request): JsonResponse
+    {
+        $status =  Password::sendResetLink($request->validated());
+
+        return $status === Password::RESET_LINK_SENT
+            ? response()->json(['message' => 'reset link sent'], 200)
+            : response()->json(['message' => 'reset link not sent'], 400);
+    }
+
+    public function reset()
+    {
+
+
+
+
+    }
+
+    public function update()
+    {
+
+    }
+
 
     public function googleRedirect(): RedirectResponse
     {
