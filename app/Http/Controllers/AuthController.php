@@ -9,6 +9,7 @@ use App\Http\Requests\auth\EmailVerificationRequest;
 use App\Http\Requests\auth\ForgetRequest;
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
+use App\Http\Requests\auth\ResetRequest;
 use App\Jobs\ProcessVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -66,12 +67,18 @@ class AuthController extends Controller
             : response()->json(['message' => 'reset link not sent'], 400);
     }
 
-    public function reset()
+    public function reset(ResetRequest $request)
     {
+        $status  = Password::reset($request->validated(), function  ($user) use($request) {
+            $user->password = $request->password;
+            $user->setRememberToken(\Illuminate\Support\Str::random(60));
 
+            $user->save();
+        });
 
-
-
+        return $status === Password::PASSWORD_RESET  ?
+            response()->json(['message' => 'password reset successfully'], 200) :
+            response()->json(['message' => 'password reset failed'], 400);
     }
 
     public function update()

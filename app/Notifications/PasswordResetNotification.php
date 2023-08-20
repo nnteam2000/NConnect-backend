@@ -34,9 +34,11 @@ class PasswordResetNotification extends Notification implements ShouldQueue, Sho
 
     public function toMail(object $notifiable): MailMessage
     {
+        
         return (new MailMessage())->view(
             'mail.feedback',
             [
+                'greeting' => 'Hi '.$notifiable->name,
                 'thank_you' => 'You are receiving this email because we received a password reset request for your account.',
                 'buttonText' => 'Reset Password',
                 'hint' => 'If you did not request a password reset, no further action is required.',
