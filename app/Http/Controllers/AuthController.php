@@ -10,9 +10,13 @@ use App\Http\Requests\auth\ForgetRequest;
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
 use App\Http\Requests\auth\ResetRequest;
+use App\Http\Requests\auth\UpdateRequest;
 use App\Jobs\ProcessVerifyEmail;
+use App\Mail\UpdatedEmailVerification;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -67,24 +71,65 @@ class AuthController extends Controller
             : response()->json(['message' => 'reset link not sent'], 400);
     }
 
-    public function reset(ResetRequest $request)
+    public function reset(ResetRequest $request): JsonResponse
     {
-        $status  = Password::reset($request->validated(), function  ($user) use($request) {
+        $status  = Password::reset($request->validated(), function ($user) use ($request) {
             $user->password = $request->password;
             $user->setRememberToken(\Illuminate\Support\Str::random(60));
 
             $user->save();
         });
 
-        return $status === Password::PASSWORD_RESET  ?
+        return $status === Password::PASSWORD_RESET ?
             response()->json(['message' => 'password reset successfully'], 200) :
             response()->json(['message' => 'password reset failed'], 400);
     }
 
-    public function update()
+    public function update(UpdateRequest $request): JsonResponse
     {
+        $data = $request->validated();
 
+        if(isset($data['email_verified'], $data['email'])) {
+            // make this more secure
+            // anyone who will provide email_verified = true and email = any email will be able to update the email
+            auth()->user()->update(['email_verified_at' => now(), 'email' => $data['email']]);
+            return response()->json(['message' => 'email updated succesfully'], 200);
+        }
+
+        unset($data['email_verified']);
+
+        if(empty($data)) {
+            return response()->json(['message' => 'no data to update'], 400);
+        }
+
+        if($request->hasFile('image')) {
+            $data['image'] =  env('APP_URL') . '/storage/' . $request->file('image')->store('avatars');
+        }
+
+        if($request->has('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        if($request->has('email')) {
+            $data['email_verified_at'] =  null;
+            Mail::to($data['email'])->send(new UpdatedEmailVerification(
+                auth()->user(),
+                $data['email']
+            ));
+            unset($data['email']);
+        }
+
+        auth()->user()->update($data);
+
+        return response()->json(
+            [
+                'message' => 'user updated successfully. If email change was requested please verify the email we sent you for changes to persist'
+            ],
+            200
+        );
     }
+
+
 
 
     public function googleRedirect(): RedirectResponse

@@ -27,6 +27,8 @@ Route::group(['controller' => AuthController::class], function () {
     Route::post('/forget', 'forget')->name('password.forget');
     Route::post('/reset', 'reset')->name('password.reset');
 
+    Route::patch('/update', 'update')->name('auth.update');
+
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/user', 'isAuthenticated')->name('auth.user');
         Route::get('/logout', 'logout')->name('auth.logout');
@@ -34,7 +36,7 @@ Route::group(['controller' => AuthController::class], function () {
 });
 
 
-Route::group(['middleware' => 'auth:sanctum', 'controller' => PostController::class, 'prefix'=> 'posts'], function () {
+Route::group(['middleware' => 'auth:sanctum', 'controller' => PostController::class, 'prefix' => 'posts'], function () {
     Route::get('/', 'index')->name('posts.index');
     Route::get('/{post}', 'show')->name('posts.show');
     Route::post('/store', 'store')->name('posts.store');
@@ -42,7 +44,7 @@ Route::group(['middleware' => 'auth:sanctum', 'controller' => PostController::cl
     Route::delete('/delete/{post}', 'delete')->name('posts.delete');
 });
 
-Route::group(['middleware' => 'auth:sanctum', 'controller' => CommentController::class, 'prefix'=> 'comments'], function () {
+Route::group(['middleware' => 'auth:sanctum', 'controller' => CommentController::class, 'prefix' => 'comments'], function () {
     Route::get('/', 'index')->name('comment.index');
     Route::post('/store', 'store')->name('comment.store');
     Route::patch('/update/{comment}', 'update')->name('comment.update');
